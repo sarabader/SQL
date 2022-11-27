@@ -1,0 +1,71 @@
+create database store;
+use store;
+
+create table countries(
+	  code int PRIMARY key,
+    name varchar(20) unique,
+    continent_name varchar(20) not null
+);
+ 
+
+create table users(
+	  id int PRIMARY KEY,
+	  full_name varchar(20),
+	  email varchar(20) unique,
+    gender char(1) check(gender="m" or gender="f"),
+    date_of_birth varchar(15),
+	  created_at timestamp not null default CURRENT_TIMESTAMP,
+    country_code int,
+    foreign key (country_code) references countries(code)
+);
+
+
+create table orders(
+	  id int PRIMARY KEY,
+    user_id int,
+    status varchar(6) check(status="start" or status="finish"),
+	  created_at timestamp not null default CURRENT_TIMESTAMP,
+	  foreign key (user_id) references users(id)
+);
+
+create table products(
+	id int PRIMARY KEY,
+    price int default 0,
+    name varchar(10) not null,
+	status varchar(10) check(status="valid" or status="expired"),
+	created_at timestamp not null default CURRENT_TIMESTAMP
+);
+
+
+create table order_products(
+	  order_id int primary key ,
+    product_id int primary key,
+    quantity int default 0,
+	  foreign key (order_id) references orders(id),
+    foreign key (product_id) references products(id)
+    
+);
+
+
+insert into  countries values (3309,'saudi arabia','ryiadh');
+insert into  countries values (8890,'saudi','riy');
+
+insert into users values (1,'sara','s@gmail.com','m','30-04-1999','8890');
+insert into users values (2,'sara','b@gmail.com','m','30-04-1999','3309');
+
+insert into orders values(11,1,'finish','12-12-2022');
+
+insert into products values (09,'xxxx', 3444,'expired',12-12-2022);
+insert into products values (06,'sss',2346,'valid',12-12-2022);
+
+insert into order_products values (11,09,1);
+
+update countries set name ='dubi' where name='saudi arabia';
+
+delete from products where id=06;
+
+select * from countries;
+select * from users;
+select * from orders;
+select * from order_products;
+select * from products;
